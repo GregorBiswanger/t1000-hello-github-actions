@@ -1,6 +1,8 @@
 # Workflow konfiguration (Metadaten)
 name: Hello World
 description: Das ist nur ein Hello World Beispiel
+env:
+  GLOBAL_MESSAGE: "Hallo aus dem Workflow (Global)"
 
 # Events
 on: 
@@ -16,16 +18,25 @@ jobs:
     say-hello:
         name: Begrüße Teilnehmer
         runs-on: ubuntu-latest
+        env:
+          JOB_MESSAGE: "Hallo aus dem Say-Hello Job"
         
         steps:
-            - name: Verzeichnis anzeigen
-              run: pwd && ls -al
+            - name: Ausgabe global und Job
+              run: |
+                echo "GLOBAL_MESSAGE: $GLOBAL_MESSAGE"
+                echo "JOB_MESSAGE: $JOB_MESSAGE"
+
+            - name: Aktuelles Verzeichnis ansehen
+              env:
+                STEP_MESSAGE: 'Message aus dem Step'
+              run: pwd && ls -al && echo $STEP_MESSAGE
 
             - name: Daten checkout
               uses: actions/checkout@v4
 
-            - name: Verzeichnis anzeigen
-              run: pwd && ls -al
+            - name: Aktuelles Verzeichnis ansehen
+              run: pwd && ls -al && echo $STEP_MESSAGE
 
             - name: Lade hello-world.js als Artifact hoch
               uses: actions/upload-artifact@v4
@@ -39,6 +50,11 @@ jobs:
         needs: say-hello
 
         steps:
+            - name: Ausgabe global und Job
+              run: |
+                echo "GLOBAL_MESSAGE: $GLOBAL_MESSAGE"
+                echo "JOB_MESSAGE: $JOB_MESSAGE"
+
             - name: Verzeichnis anzeigen
               run: pwd && ls -al
 
