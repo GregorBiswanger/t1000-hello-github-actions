@@ -23,4 +23,14 @@ jobs:
 
             - name: JavaScript ausführen
               run: node hello-world.js
-            
+    
+    say-goodbye:
+        name: Abschied
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Verzeichnis anzeigen
+              run: pwd && ls -al
+              
+            - name: Abschied ausgabe
+              run: echo "Bye bye"
